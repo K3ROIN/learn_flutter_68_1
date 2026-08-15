@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:learn_flutter_68_1/screen/home.dart';
+// import 'package:learn_flutter_68_1/screen/home.dart';
+import 'package:learn_flutter_68_1/screen/item.dart';
 
 void main() {
   // runApp(const MyApp());
@@ -14,7 +15,8 @@ void main() {
       home: Scaffold(
         appBar: AppBar(title: Text('My App'), backgroundColor: Colors.greenAccent, centerTitle: true,
         ),
-        body: Home(),
+        // body: Home(),
+        body: Item(),
       ),
     ),
   );
