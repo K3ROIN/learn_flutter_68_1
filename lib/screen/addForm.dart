@@ -9,6 +9,11 @@ class AddForm extends StatefulWidget {
 }
 
 class _AddFormState extends State<AddForm> {
+  final _formKey = GlobalKey<FormState>();
+  String _name = "";
+  int _age = 20;
+  Job? _job =Job.developer;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -54,8 +59,76 @@ class _AddFormState extends State<AddForm> {
               ),
             ],
           )
-        )
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Name'),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter a name";
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _name = value ?? '';
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Age'),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please enter a valid number";
+                    }
+                    if (int.tryParse(value) == null) {
+                      return "Please enter a valid number";
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _age = int.tryParse(value!) ?? 20;
+                  },
+                ),
+                DropdownButtonFormField<JOb>(
+                  decoration: InputDecoration(labelText: "Job"),
+                  items: Job.values.map((key) {
+                    return DropdownMenuItem(value: key, child: Text(key.title));
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      _job = value!;
+                    });
+                  },
+                ),
+                SizedBox(height: 20),
+                FilledButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      print("Name: $_name, Age: $_age, Job: ${_job?.title}");
+                      setState(() {
+                        people.add(Person(name: _name, age: _age, job: _job!));
+                      });
+
+                      _formKey.currentState!.reset();
+                    }
+                  },
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Colors.greenAccent,
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 50),
+                  ),
+                  child: Text(
+                    "Submit", style: TextStyle(color: Colors.white, fontSize: 20)
+                    ),
+                  ),
+                ),
+              ]
+            ),
+          ),
         ),
+      ),
     );
   }
 }
